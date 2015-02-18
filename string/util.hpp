@@ -1,4 +1,6 @@
 #include <cstring>
+#include <string>
+#include <vector>
 
 namespace nk {
 	static const int MAXK = 26;
@@ -10,5 +12,9 @@ namespace nk {
 			memset(next, -1, sizeof next);
 		}
 	};
+
+	int pow2(int k) {
+		return k < 0 ? 0 : (1 << k);
+	}
 }
 //nk
