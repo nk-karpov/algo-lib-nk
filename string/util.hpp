@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+using vi = std::vector<int>;
+
 namespace nk {
 	static const int MAXK = 26;
 	struct state {
