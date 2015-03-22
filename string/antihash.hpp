@@ -1,21 +1,13 @@
-#include <cstdio>
-#include <cassert>
-#include <cstring>
-#include <cassert>
-#include <vector>
-#include <string>
-#include <map>
-#include <set>
-#include <cstdarg>
-#include <iostream>
-#include <algorithm>
-#include <queue>
+#ifndef ANTIHASH_NK
+#define ANTIHASH_NK
 
-using namespace std;
+#include <algorithm>
+#include <cassert>
+#include <string>
+#include <vector>
 
 namespace nk {
 	typedef __int128_t ll;
-
 
 	inline ll add(ll a, ll b, ll p) {
 		assert(a >= 0 && b >= 0);
@@ -48,26 +40,26 @@ namespace nk {
 			return a.s < b.s;
 		}
 
-		void go(int lvl, int ind, int flag, vector<vector<h>> &table, string &s, string &t) {
+		void go(int lvl, int ind, int flag, std::vector<std::vector<h>> &table, std::string &s, std::string &t) {
 			if (ind == -1) return;
 			if (lvl == 0) {
 				int xx = table[lvl][ind].f;
 				s[xx] = 'b';
 				t[xx] = 'a';
-				if (!flag) swap(s[xx], t[xx]);
+				if (!flag) std::swap(s[xx], t[xx]);
 				return ;
 			}
 			go(lvl - 1, table[lvl][ind].f, flag, table, s, t);
 			go(lvl - 1, table[lvl][ind].s, flag ^ 1, table, s, t);
 		}
 
-		int build_test(ll p, ll q, int n, string &s, string &t) {
+		int build_test(ll p, ll q, int n, std::string &s, std::string &t) {
 			static const int k = 18;
 			assert(p < q);
-			s = string(n, 'a');
-			t = string(n, 'a');
-			vector<vector<h>> table;
-			table.push_back(vector<h>());
+			s = std::string(n, 'a');
+			t = std::string(n, 'a');
+			std::vector<std::vector<h>> table;
+			table.push_back(std::vector<h>());
 			table[0].resize(n);
 			ll c = 1;
 			for (int i = 0; i < n; i++) {
@@ -77,7 +69,7 @@ namespace nk {
 			for (int lvl = 0; 1; lvl++) {
 				sort(table[lvl].begin(), table[lvl].end());
 				if ((int)table[lvl].size() < k) {
-					vector<pair<ll, int>> t0;
+					std::vector<std::pair<ll, int>> t0;
 					int nn = table[lvl].size();
 					int n0 = nn / 2;
 					int n1 = nn - n0;
@@ -87,7 +79,7 @@ namespace nk {
 						for (int j = 0; j < n0; j++) {
 							if (mask & (1 << j)) sum = add(sum , table[lvl][j].x, q);
 						}
-						t0.push_back(make_pair(sum, mask));
+						t0.push_back(std::make_pair(sum, mask));
 						if (sum == 0) {
 							for (int j = 0; j < n0; j++) {
 								if (mask & (1 << j)) go(lvl, j, 0, table, s, t);
@@ -108,7 +100,7 @@ namespace nk {
 							}
 							return 1;
 						}
-						auto ind = lower_bound(t0.begin(), t0.end(), make_pair(q - sum, -1));
+						auto ind = lower_bound(t0.begin(), t0.end(), std::make_pair(q - sum, -1));
 						if (ind != t0.end() && ind->first + sum == q) {
 							for (int j = 0; j < n0; j++) {
 								if (ind->second & (1 << j)) go(lvl, j, 0, table, s, t);
@@ -125,7 +117,7 @@ namespace nk {
 					go(lvl, 0, 0, table, s, t);
 					return 1;
 				}
-				table.push_back(vector<h>((table[lvl].size() + 1) / 2));
+				table.push_back(std::vector<h>((table[lvl].size() + 1) / 2));
 				for (int i = 0; 2 * i + 1 < (int)table[lvl].size(); i++) {
 					table[lvl + 1][i] = h(add(table[lvl][2 * i].x, q - table[lvl][2 * i + 1].x, q), 2 * i, 2 * i + 1);
 				}
@@ -138,3 +130,4 @@ namespace nk {
 	//antihash
 }
 //nk
+#endif
